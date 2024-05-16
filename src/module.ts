@@ -14,10 +14,11 @@ export default defineNuxtModule<ModuleOptions>({
   },
   setup(options, nuxt) {
     if (env.NODE_ENV === 'development') {
-      const { setUrl, close } = createShortCuts(options)
+      const { close, setUrl } = createShortCuts(options)
 
       nuxt.hook('listen', async (_, listener) => {
-        setUrl(listener.url)
+        const urls = await listener.getURLs()
+        setUrl(urls)
       })
 
       nuxt.hook('close', () => {

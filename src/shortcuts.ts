@@ -1,61 +1,21 @@
 import readline from 'node:readline'
 import process, { stdin } from 'node:process'
-import open from 'open'
 import colors from 'picocolors'
 import { tryUseNuxt } from '@nuxt/kit'
 import { logger } from './logger'
-import type { ModuleOptions, ShortCut } from './types'
+import type { ModuleOptions, NuxtDevServerUrl, ShortCut } from './types'
+import { builtinShortcuts } from './builtin'
 
 export function createShortCuts(options: ModuleOptions) {
   const { rawMode } = options
-  let url = ''
-  let actionRunning = false
+  let devServerUrls: NuxtDevServerUrl[] = []
+
+  function setUrl(urls: NuxtDevServerUrl[]) {
+    devServerUrls = urls
+  }
+
   let rl: readline.Interface | null = null
-
-  const shortcuts: ShortCut[] = [
-    {
-      key: 'u',
-      description: 'show server url',
-      action() {
-        logger.log(
-          colors.green(' ➜ Local: ')
-          + colors.cyan(colors.underline(url)),
-        )
-      },
-    },
-    {
-      key: 'r',
-      description: 'restart the nuxt server',
-      action(nuxt) {
-        nuxt?.callHook('restart')
-      },
-    },
-    {
-      key: 'o',
-      description: 'open in browser',
-      action: async () => {
-        await open(url)
-      },
-    },
-    {
-      key: 'c',
-      description: 'clear console',
-      action() {
-        // eslint-disable-next-line no-console
-        console.clear()
-      },
-    },
-    {
-      key: 'q',
-      description: 'exit',
-      async action(nuxt) {
-        await nuxt?.callHook('close', nuxt).finally(() => {
-          process.exit(1)
-        })
-      },
-    },
-  ]
-
+  let actionRunning = false
   async function onInput(input: string) {
     const nuxt = tryUseNuxt()
 
@@ -71,7 +31,7 @@ export function createShortCuts(options: ModuleOptions) {
       return
 
     if (input === 'h') {
-      for (const shortcut of shortcuts) {
+      for (const shortcut of builtinShortcuts) {
         logger.info(
           colors.dim('  press ')
           + colors.bold(`${shortcut.key}${rawMode ? '' : ' + enter'}`)
@@ -82,12 +42,15 @@ export function createShortCuts(options: ModuleOptions) {
       return
     }
 
-    const shortcut = shortcuts.find(shortcut => shortcut.key === input)
+    const shortcut = builtinShortcuts.find(shortcut => shortcut.key === input)
     if (!shortcut || shortcut.action == null)
       return
 
     actionRunning = true
-    await shortcut.action(nuxt)
+    await shortcut.action({
+      nuxt,
+      urls: devServerUrls,
+    })
     actionRunning = false
   }
 
@@ -116,14 +79,10 @@ export function createShortCuts(options: ModuleOptions) {
     }
   }
 
-  function setUrl(_url: string) {
-    url = _url
-  }
-
   bindShortCuts()
 
   return {
-    setUrl,
     close,
+    setUrl,
   }
 }
