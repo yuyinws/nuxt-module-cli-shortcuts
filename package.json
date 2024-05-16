@@ -1,7 +1,7 @@
 {
   "name": "nuxt-module-cli-shortcuts",
   "type": "module",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Bring Vite's CLI shortcuts feature to Nuxt.",
   "author": "yuyinws",
   "license": "MIT",
