@@ -8,6 +8,8 @@
 - [✨ &nbsp;Release Notes](/CHANGELOG.md)
 - [🏀 Online playground](https://stackblitz.com/github/yuyinws/nuxt-module-cli-shortcuts?file=playground%2Fapp.vue)
 
+![demo](https://cdn.jsdelivr.net/gh/yuyinws/static@master/2024/05/upgit_20240516_1715852704.gif)
+
 ## Features
 
 <!-- Highlight some of the features your module provide here -->
@@ -105,3 +107,9 @@ customShortcuts: [
 
 [nuxt-src]: https://img.shields.io/badge/Nuxt-020420?logo=nuxt.js
 [nuxt-href]: https://nuxt.com
+
+## ❤️ Credits
+
+Inspired by
+
+[Vite Shortcuts](https://github.com/vitejs/vite/blob/main/packages/vite/src/node/shortcuts.ts)
