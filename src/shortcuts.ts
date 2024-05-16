@@ -3,11 +3,15 @@ import process, { stdin } from 'node:process'
 import colors from 'picocolors'
 import { tryUseNuxt } from '@nuxt/kit'
 import { logger } from './logger'
-import type { ModuleOptions, NuxtDevServerUrl, ShortCut } from './types'
+import type { ModuleOptions, NuxtDevServerUrl } from './types'
 import { builtinShortcuts } from './builtin'
 
 export function createShortCuts(options: ModuleOptions) {
-  const { rawMode } = options
+  const { rawMode, customShortCuts } = options
+  const mergedShortCuts = [...builtinShortcuts, ...customShortCuts || []]
+
+  const nuxt = tryUseNuxt()
+
   let devServerUrls: NuxtDevServerUrl[] = []
 
   function setUrl(urls: NuxtDevServerUrl[]) {
@@ -17,8 +21,6 @@ export function createShortCuts(options: ModuleOptions) {
   let rl: readline.Interface | null = null
   let actionRunning = false
   async function onInput(input: string) {
-    const nuxt = tryUseNuxt()
-
     if (rawMode) {
       if (input === '\x03' || input === '\x04') {
         await nuxt?.callHook('close', nuxt).finally(() => {
@@ -31,7 +33,7 @@ export function createShortCuts(options: ModuleOptions) {
       return
 
     if (input === 'h') {
-      for (const shortcut of builtinShortcuts) {
+      for (const shortcut of mergedShortCuts) {
         logger.info(
           colors.dim('  press ')
           + colors.bold(`${shortcut.key}${rawMode ? '' : ' + enter'}`)
@@ -42,7 +44,7 @@ export function createShortCuts(options: ModuleOptions) {
       return
     }
 
-    const shortcut = builtinShortcuts.find(shortcut => shortcut.key === input)
+    const shortcut = mergedShortCuts.find(shortcut => shortcut.key === input)
     if (!shortcut || shortcut.action == null)
       return
 
@@ -52,13 +54,6 @@ export function createShortCuts(options: ModuleOptions) {
       urls: devServerUrls,
     })
     actionRunning = false
-  }
-
-  function close() {
-    if (rawMode)
-      stdin.off('data', onInput).pause()
-    else
-      rl!.close()
   }
 
   function bindShortCuts() {
@@ -81,8 +76,14 @@ export function createShortCuts(options: ModuleOptions) {
 
   bindShortCuts()
 
+  nuxt?.hook('close', () => {
+    if (rawMode)
+      stdin.off('data', onInput).pause()
+    else
+      rl?.close()
+  })
+
   return {
-    close,
     setUrl,
   }
 }

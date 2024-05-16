@@ -11,6 +11,7 @@ export interface ShortCut {
 
 export interface ModuleOptions {
   rawMode: boolean
+  customShortCuts?: ShortCut[]
 }
 
 export interface NuxtDevServerUrl {

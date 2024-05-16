@@ -1,4 +1,3 @@
-import { env } from 'node:process'
 import { defineNuxtModule } from '@nuxt/kit'
 import { createShortCuts } from './shortcuts'
 import type { ModuleOptions } from './types'
@@ -10,20 +9,14 @@ export default defineNuxtModule<ModuleOptions>({
   },
   // Default configuration options of the Nuxt module
   defaults: {
-    rawMode: false,
+    rawMode: true,
+    customShortCuts: [],
   },
   setup(options, nuxt) {
-    if (env.NODE_ENV === 'development') {
-      const { close, setUrl } = createShortCuts(options)
-
-      nuxt.hook('listen', async (_, listener) => {
-        const urls = await listener.getURLs()
-        setUrl(urls)
-      })
-
-      nuxt.hook('close', () => {
-        close()
-      })
-    }
+    nuxt.hook('listen', async (_, listener) => {
+      const { setUrl } = createShortCuts(options)
+      const urls = await listener.getURLs()
+      setUrl(urls)
+    })
   },
 })
