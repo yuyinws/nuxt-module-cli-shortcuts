@@ -1,6 +1,18 @@
 # Changelog
 
 
+## v0.0.4
+
+[compare changes](https://github.com/yuyinws/nuxt-module-cli-shortcuts/compare/v0.0.3...v0.0.4)
+
+### 🏡 Chore
+
+- Update docs ([849af53](https://github.com/yuyinws/nuxt-module-cli-shortcuts/commit/849af53))
+
+### ❤️ Contributors
+
+- Yuyinws <lyc657508366@gmail.com>
+
 ## v0.0.3
 
 [compare changes](https://github.com/yuyinws/nuxt-module-cli-shortcuts/compare/v0.0.2...v0.0.3)
