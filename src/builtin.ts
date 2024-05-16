@@ -42,7 +42,7 @@ export const builtinShortcuts: ShortCut[] = [
   },
   {
     key: 'q',
-    description: 'exit',
+    description: 'exit nuxt server',
     async action({ nuxt }) {
       await nuxt?.callHook('close', nuxt).finally(() => {
         process.exit(1)

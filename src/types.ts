@@ -10,7 +10,7 @@ export interface ShortCut {
 }
 
 export interface ModuleOptions {
-  rawMode: boolean
+  rawMode?: boolean
   customShortCuts?: ShortCut[]
 }
 

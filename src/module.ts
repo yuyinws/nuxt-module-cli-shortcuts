@@ -9,7 +9,7 @@ export default defineNuxtModule<ModuleOptions>({
   },
   // Default configuration options of the Nuxt module
   defaults: {
-    rawMode: true,
+    rawMode: false,
     customShortCuts: [],
   },
   setup(options, nuxt) {
