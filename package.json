@@ -1,10 +1,11 @@
 {
   "name": "nuxt-module-cli-shortcuts",
-  "version": "0.0.0",
-  "description": "My new Nuxt module",
-  "repository": "your-org/my-module",
-  "license": "MIT",
   "type": "module",
+  "version": "0.0.0",
+  "description": "Bring Vite's CLI shortcuts feature to Nuxt.",
+  "author": "yuyinws",
+  "license": "MIT",
+  "repository": "https://github.com/yuyinws/nuxt-module-cli-shortcuts",
   "exports": {
     ".": {
       "types": "./dist/types.d.ts",
@@ -35,6 +36,7 @@
     "picocolors": "^1.0.1"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^2.18.0",
     "@nuxt/devtools": "^1.2.0",
     "@nuxt/eslint-config": "^0.3.10",
     "@nuxt/module-builder": "^0.6.0",

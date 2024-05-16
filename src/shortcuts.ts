@@ -1,4 +1,5 @@
 import readline from 'node:readline'
+import { stdin } from 'node:process'
 import open from 'open'
 import colors from 'picocolors'
 import { tryUseNuxt } from '@nuxt/kit'
@@ -9,7 +10,7 @@ export function createShortCuts() {
   let url = ''
   let actionRunning = false
 
-  const rl = readline.createInterface({ input: process.stdin })
+  const rl = readline.createInterface({ input: stdin })
 
   const shortcuts: ShortCut[] = [
     {
@@ -41,6 +42,7 @@ export function createShortCuts() {
       key: 'c',
       description: 'clear console',
       action() {
+        // eslint-disable-next-line no-console
         console.clear()
       },
     },
@@ -55,7 +57,8 @@ export function createShortCuts() {
     )
 
     rl.on('line', async (input: string) => {
-      if (actionRunning) return
+      if (actionRunning)
+        return
 
       if (input === 'h') {
         for (const shortcut of shortcuts) {
@@ -70,7 +73,8 @@ export function createShortCuts() {
       }
 
       const shortcut = shortcuts.find(shortcut => shortcut.key === input)
-      if (!shortcut || shortcut.action == null) return
+      if (!shortcut || shortcut.action == null)
+        return
 
       actionRunning = true
       await shortcut.action()
